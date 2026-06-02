@@ -10,6 +10,13 @@
 
 <button class="btn-tema btn-tema-flutuante" onclick="Tema.alternar()">🪶 Academia</button>
 
+<!-- Galeria animada de fundo -->
+<div class="fundo-galeria">
+  <div class="galeria-faixa" id="galeria-faixa-1"></div>
+  <div class="galeria-faixa galeria-inversa" id="galeria-faixa-2"></div>
+  <div class="galeria-faixa" id="galeria-faixa-3"></div>
+</div>
+
 <div class="tela-inicio">
   <h1 class="logo-titulo">Linhas do Crime</h1>
   <p class="logo-subtitulo">Investigações &amp; Deduções</p>
@@ -268,6 +275,39 @@
 <!-- Carrega todos os casos para que os títulos fiquem disponíveis na lista -->
 <script src="casos/20260001.js"></script>
 <script src="casos/20260002.js"></script>
+
+<script>
+  // ── Galeria animada de fundo ──
+  var GALERIA_IMGS = [
+    'carlinhos','glauco','tereza',
+    'lapis','mochila','cordao',
+    'campo','cantina','reitoria',
+    'bernardo','clarice','malta',
+    'estatueta','bisturi','fio',
+    'auditorio','laboratorio','jardim'
+  ];
+
+  function popularFaixa(id, lista) {
+    var faixa = document.getElementById(id);
+    if (!faixa) return;
+    // Duplica para loop contínuo sem corte
+    var dupla = lista.concat(lista);
+    dupla.forEach(function(nome) {
+      var img = document.createElement('img');
+      img.src = 'assets/imagens/locais/' + nome + '.png';
+      img.alt = nome;
+      img.className = 'galeria-item';
+      faixa.appendChild(img);
+    });
+  }
+
+  var invertida = GALERIA_IMGS.slice().reverse();
+  var deslocada  = GALERIA_IMGS.slice(9).concat(GALERIA_IMGS.slice(0, 9));
+
+  popularFaixa('galeria-faixa-1', GALERIA_IMGS);
+  popularFaixa('galeria-faixa-2', invertida);
+  popularFaixa('galeria-faixa-3', deslocada);
+</script>
 
 </body>
 </html>
