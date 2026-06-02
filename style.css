@@ -25,7 +25,7 @@ body {
   background-color: var(--bg);
   color: var(--texto);
   font-family: 'VT323', monospace;
-  font-size: 26px;
+  font-size: 20px;
   min-height: 100vh;
 }
 
@@ -469,8 +469,8 @@ body.pagina-jogo {
 
 #historia {
   font-family: 'VT323', monospace;
-  font-size: 1.3rem;
-  line-height: 1.5;
+  font-size: 1.05rem;
+  line-height: 1.4;
   color: var(--branco);
 }
 
@@ -573,16 +573,16 @@ body.academia .cursor-digitando {
 
 .card h3 {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 0.95rem;
+  font-size: 0.72rem;
   color: var(--branco);
-  line-height: 1.5;
-  margin-bottom: 0.25rem;
+  line-height: 1.4;
+  margin-bottom: 0.15rem;
 }
 
 .card ul {
   list-style: none;
   font-family: 'VT323', monospace;
-  font-size: 1.2rem;
+  font-size: 0.92rem;
   color: var(--branco-dim);
   line-height: 1.5;
 }
@@ -591,19 +591,19 @@ body.academia .cursor-digitando {
 
 .card .detalhe, .card-info p {
   font-family: 'VT323', monospace;
-  font-size: 1.15rem;
+  font-size: 0.9rem;
   color: var(--branco-dim);
-  line-height: 1.4;
-  margin-top: 0.25rem;
+  line-height: 1.35;
+  margin-top: 0.15rem;
 }
 
 .card .peso, .card .ambiente {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 0.68rem;
+  font-size: 0.58rem;
   color: var(--verde);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.15rem;
 }
 
 /* ─── CARTÃO: layout horizontal ─── */
@@ -690,33 +690,33 @@ body.academia .cursor-digitando {
 /* ─── TAMANHOS POR TIPO DE CARTÃO ─── */
 
 /* Suspeitos: levemente menores */
-.card-suspeito .card-imagem { width: 70px; min-width: 70px; }
-.card-suspeito h3            { font-size: 0.7rem; }
-.card-suspeito .card ul      { font-size: 1rem; }
-.card-suspeito .card-info p  { font-size: 0.95rem; }
+.card-suspeito .card-imagem { width: 66px; min-width: 66px; }
+.card-suspeito h3            { font-size: 0.65rem; }
+.card-suspeito .card ul      { font-size: 0.88rem; }
+.card-suspeito .card-info p  { font-size: 0.85rem; }
 
-/* Armas e Locais: maiores */
+/* Armas e Locais */
 .card-arma .card-imagem,
-.card-local .card-imagem     { width: 100px; min-width: 100px; }
+.card-local .card-imagem     { width: 88px; min-width: 88px; }
 .card-arma h3,
-.card-local h3               { font-size: 0.88rem; }
+.card-local h3               { font-size: 0.72rem; }
 .card-arma .card ul,
-.card-local .card ul         { font-size: 1.3rem; }
+.card-local .card ul         { font-size: 0.95rem; }
 .card-arma .card-info p,
-.card-local .card-info p     { font-size: 1.25rem; }
+.card-local .card-info p     { font-size: 0.92rem; }
 .card-arma .card .peso,
-.card-local .card .ambiente  { font-size: 0.72rem; }
+.card-local .card .ambiente  { font-size: 0.58rem; }
 
 /* ─── PISTAS ─── */
 .pista {
   background: #1a2a1a;
   border: 1px solid #448844;
-  padding: 0.8rem 1rem 0.8rem 2.5rem;
-  margin-bottom: 0.5rem;
+  padding: 0.5rem 0.8rem 0.5rem 2rem;
+  margin-bottom: 0.4rem;
   cursor: pointer;
   font-family: 'VT323', monospace;
-  font-size: 1.3rem;
-  line-height: 1.5;
+  font-size: 1rem;
+  line-height: 1.4;
   color: #ddf0dd;
   position: relative;
   transition: border-color 0.2s, box-shadow 0.2s, color 0.2s, background 0.2s;
