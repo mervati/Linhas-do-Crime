@@ -450,7 +450,9 @@ body.pagina-jogo {
 /* ─── FAIXA DA HISTÓRIA ─── */
 .faixa-historia {
   flex-shrink: 0;
-  padding: 0.6rem 1.2rem;
+  max-height: 6rem;
+  overflow: hidden;
+  padding: 0.5rem 1.2rem;
   background: var(--bg2);
   border-bottom: 1px solid var(--borda);
   display: flex;
