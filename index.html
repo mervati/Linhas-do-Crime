@@ -46,6 +46,7 @@
     <button class="btn-primario" id="btn-continuar" disabled>Continuar</button>
     <button class="btn-como-jogar" id="btn-como-jogar">📋 Como Jogar</button>
   </div>
+  <p class="logo-versao" id="logo-versao"></p>
 
   <!-- TELA 3: Manual de Investigação -->
   <div class="painel painel-manual oculto" id="tela-como-jogar">
@@ -119,10 +120,14 @@
   </div>
 </div>
 
+<script src="versao.js"></script>
 <script src="casos/registro.js"></script>
 <script src="progresso.js"></script>
 <script src="tema.js"></script>
-<script>Tema.carregar();</script>
+<script>
+  Tema.carregar();
+  document.getElementById("logo-versao").textContent = "v" + VERSAO;
+</script>
 <script>
   // Dados do formulário
   let nomeEscolhido = "";

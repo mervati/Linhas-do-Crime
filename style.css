@@ -128,6 +128,15 @@ body.academia .galeria-item {
   box-shadow: var(--glow-fraco);
 }
 
+.logo-versao {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  color: #000000;
+  letter-spacing: 0.2em;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
 .separador {
   width: 200px;
   height: 1px;
