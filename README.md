@@ -1,7 +1,7 @@
 # 🔍 Linhas do Crime
 
 <p align="center">
-  <img src="https://img.shields.io/badge/versão-1.0.0-brightgreen?style=flat" />
+  <img src="https://img.shields.io/badge/versão-1.2.0-brightgreen?style=flat" />
   <img src="https://img.shields.io/badge/status-ativo-brightgreen?style=flat" />
   <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white" />
   <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white" />
@@ -29,13 +29,14 @@ Jogo de dedução lógica baseado no livro **Murdle**, onde o(a) jogador(a) assu
 
 ## Funcionalidades
 
+- **Galeria animada** na tela inicial — imagens de todos os casos rolando em 3 faixas infinitas com velocidades e direções diferentes; filtro temático (verde Matrix ou sépia Academia); cor original ao passar o mouse
 - **Flexão de gênero automática** — marcadores `[nome]`, `[Detetive]` e `palavra(a)` adaptam o texto ao gênero escolhido
-- **Efeito de máquina de escrever** na narração do caso
-- **Spotlight nas pistas** — ao clicar, cartões não relacionados escurecem e os relacionados acendem
-- **Preview de imagem** — ao passar o mouse sobre a foto de um suspeito/arma/local, exibe a imagem real em tamanho maior
-- **Caderno de Anotações** com grid lógico (Suspeitos×Armas, Suspeitos×Locais, Locais×Armas) e auto-preenchimento de descartes
+- **Efeito de máquina de escrever** na narração do caso ao carregar
+- **Spotlight nas pistas** — ao clicar, cartões não relacionados escurecem e os relacionados acendem com glow
+- **Preview de imagem** — ao passar o mouse sobre a foto de um suspeito/arma/local, exibe a imagem real em tamanho maior sem filtro
+- **Caderno de Anotações** com grid lógico (Suspeitos×Armas, Suspeitos×Locais, Locais×Armas) e auto-preenchimento de descartes; acusação direta pelo caderno
 - **Dois temas visuais** alternáveis: *Matrix* (terminal hacker verde/preto) e *Academia* (pergaminho, madeira e latão)
-- **Progresso salvo** em `localStorage` — o jogo lembra o nome, gênero, casos concluídos e estado do caderno
+- **Progresso salvo** em `localStorage` — nome, gênero, casos concluídos e estado do caderno
 - **Modo História** com desbloqueio sequencial de casos
 
 ---
@@ -53,7 +54,7 @@ Jogo de dedução lógica baseado no livro **Murdle**, onde o(a) jogador(a) assu
 
 ```
 Linhas-do-Crime/
-├── index.html              # Tela inicial (cadastro, modo, instruções)
+├── index.html              # Tela inicial (cadastro, modo, galeria, instruções)
 ├── jogo.html               # Tela do jogo
 ├── style.css               # Estilos — tema Matrix e tema Academia
 ├── motor.js                # Motor do jogo (renderização, pistas, acusação)
@@ -67,7 +68,7 @@ Linhas-do-Crime/
 │   └── 20260002.js         # Dados do caso #20260002
 └── assets/
     └── imagens/
-        └── locais/         # Imagens dos suspeitos, armas e locais
+        └── locais/         # Imagens dos suspeitos, armas e locais (18 imagens)
 ```
 
 ---
@@ -82,8 +83,22 @@ Linhas-do-Crime/
 
 ## Changelog
 
+### v1.2.0 — 2026-06-02
+- Galeria animada infinita na tela inicial com imagens dos casos, filtros por tema e hover em cor real
+- Correção do scroll no GitHub Pages com position:fixed e overflow:hidden no html
+- Redução das fontes para caber tudo em uma tela sem scroll
+- Faixa do meio da galeria corrigida (posição inicial calculada corretamente)
+- Subtítulo do tema Academia com cor legível sobre o fundo dinâmico
+
+### v1.1.0 — 2026-06-02
+- Adicionado caso #20260002 "A Premiação Mortal"
+- Efeito de máquina de escrever na narração do caso
+- Caderno de Anotações com acusação direta pelo grid lógico
+- Sistema de temas Matrix e Academia com alternância persistida
+- Spotlight nas pistas com escurecimento dos cartões não relacionados
+
 ### v1.0.0 — 2026-06-02
-- Lançamento inicial com dois casos jogáveis
+- Lançamento inicial com caso #20260001 "Morte na Inauguração"
 - Sistema de temas Matrix e Academia
 - Caderno de Anotações com grid lógico e auto-preenchimento
 - Progresso salvo em localStorage
