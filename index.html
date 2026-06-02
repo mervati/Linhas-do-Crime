@@ -277,36 +277,89 @@
 <script src="casos/20260002.js"></script>
 
 <script>
-  // ── Galeria animada de fundo ──
-  var GALERIA_IMGS = [
-    'carlinhos','glauco','tereza',
-    'lapis','mochila','cordao',
-    'campo','cantina','reitoria',
-    'bernardo','clarice','malta',
-    'estatueta','bisturi','fio',
-    'auditorio','laboratorio','jardim'
-  ];
+  // ── Galeria animada infinita ──
 
-  function popularFaixa(id, lista) {
-    var faixa = document.getElementById(id);
-    if (!faixa) return;
-    // Duplica para loop contínuo sem corte
-    var dupla = lista.concat(lista);
-    dupla.forEach(function(nome) {
-      var img = document.createElement('img');
-      img.src = 'assets/imagens/locais/' + nome + '.png';
-      img.alt = nome;
-      img.className = 'galeria-item';
-      faixa.appendChild(img);
+  function coletarTodasImagens() {
+    var todas = [];
+    registroCasos.forEach(function(id) {
+      var caso = window['caso' + id];
+      if (!caso) return;
+      caso.suspeitos.forEach(function(s) { if (s.imagem) todas.push(s.imagem); });
+      caso.armas.forEach(function(a)     { if (a.imagem) todas.push(a.imagem); });
+      caso.locais.forEach(function(l)    { if (l.imagem) todas.push(l.imagem); });
     });
+    return todas;
   }
 
-  var invertida = GALERIA_IMGS.slice().reverse();
-  var deslocada  = GALERIA_IMGS.slice(9).concat(GALERIA_IMGS.slice(0, 9));
+  function embaralhar(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+  }
 
-  popularFaixa('galeria-faixa-1', GALERIA_IMGS);
-  popularFaixa('galeria-faixa-2', invertida);
-  popularFaixa('galeria-faixa-3', deslocada);
+  // Limita a 20 imagens embaralhadas
+  var banco = embaralhar(coletarTodasImagens()).slice(0, 20);
+
+  function iniciarFaixa(faixaId, vel) {
+    var faixa = document.getElementById(faixaId);
+    if (!faixa) return;
+
+    var LARGURA = 204; // 200px imagem + 4px gap
+    var dir     = vel < 0 ? -1 : 1;
+    var lista   = embaralhar(banco.slice());
+    var idx     = 0;
+    var pos     = 0;
+
+    function proximaSrc() {
+      // Reembaralha quando termina um ciclo completo
+      if (idx > 0 && idx % lista.length === 0) lista = embaralhar(banco.slice());
+      return lista[(idx++) % lista.length];
+    }
+
+    function criarImg(src) {
+      var img = document.createElement('img');
+      img.src = src;
+      img.className = 'galeria-item';
+      return img;
+    }
+
+    // Preenche a faixa para cobrir a tela com folga
+    var qtd = Math.ceil(window.innerWidth / LARGURA) + 4;
+    for (var i = 0; i < qtd; i++) {
+      faixa.appendChild(criarImg(proximaSrc()));
+    }
+
+    // Faixa direita: começa preenchida, com borda direita da tira na borda direita da tela
+    if (dir === 1) {
+      pos = -(qtd * LARGURA - window.innerWidth);
+    }
+
+    (function animar() {
+      pos += vel;
+
+      if (dir === -1 && pos <= -LARGURA) {
+        // Saiu pela esquerda: remove do início, adiciona nova no fim
+        faixa.removeChild(faixa.firstChild);
+        faixa.appendChild(criarImg(proximaSrc()));
+        pos += LARGURA;
+      } else if (dir === 1 && pos + faixa.childElementCount * LARGURA > window.innerWidth + LARGURA) {
+        // Saiu pela direita: remove do fim, insere nova no início
+        faixa.removeChild(faixa.lastChild);
+        faixa.insertBefore(criarImg(proximaSrc()), faixa.firstChild);
+        pos -= LARGURA;
+      }
+
+      faixa.style.transform = 'translateX(' + pos + 'px)';
+      requestAnimationFrame(animar);
+    })();
+  }
+
+  iniciarFaixa('galeria-faixa-1', -0.8);   // esquerda, velocidade média
+  iniciarFaixa('galeria-faixa-2',  0.6);   // direita, mais lenta
+  iniciarFaixa('galeria-faixa-3', -1.1);   // esquerda, mais rápida
 </script>
 
 </body>

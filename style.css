@@ -44,44 +44,26 @@ body {
   flex: 1;
   display: flex;
   gap: 4px;
-  animation: galeria-esquerda 40s linear infinite;
-}
-
-.galeria-inversa {
-  animation: galeria-direita 45s linear infinite;
+  will-change: transform;
 }
 
 .galeria-item {
   height: 100%;
-  width: auto;
-  min-width: 180px;
-  object-fit: cover;
+  width: 200px;
   flex-shrink: 0;
+  object-fit: cover;
   filter: grayscale(40%) sepia(60%) hue-rotate(80deg) brightness(0.45);
-  transition: filter 0.35s ease;
+  transition: filter 0.4s ease;
   cursor: default;
 }
 
-.galeria-item:hover {
-  filter: none;
+body .galeria-item:hover,
+body.academia .galeria-item:hover {
+  filter: none !important;
 }
 
 body.academia .galeria-item {
   filter: grayscale(30%) sepia(70%) hue-rotate(-10deg) saturate(0.8) brightness(0.55);
-}
-
-body.academia .galeria-item:hover {
-  filter: none;
-}
-
-@keyframes galeria-esquerda {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-@keyframes galeria-direita {
-  from { transform: translateX(-50%); }
-  to   { transform: translateX(0); }
 }
 
 /* ─── TELA DE INÍCIO ─── */
@@ -94,6 +76,16 @@ body.academia .galeria-item:hover {
   justify-content: center;
   min-height: 100vh;
   padding: 2rem;
+  pointer-events: none;
+}
+
+/* Reativa cliques nos elementos interativos dentro da tela-inicio */
+.tela-inicio .painel,
+.tela-inicio .logo-titulo,
+.tela-inicio .logo-subtitulo,
+.tela-inicio .separador,
+.btn-tema-flutuante {
+  pointer-events: auto;
 }
 
 .logo-titulo {
@@ -1417,7 +1409,7 @@ body.academia { --borda: #c8a84b; --verde: #8b5e1a; --verde-dim: #a07840; --glow
 
 /* ── Logo / Index ── */
 body.academia .logo-titulo  { color: #c8a84b; text-shadow: 1px 2px 0 #5a3a08; }
-body.academia .logo-subtitulo { color: #8b6a30; }
+body.academia .logo-subtitulo { color: #f0d890; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
 body.academia .separador    { background: #c8a84b; box-shadow: none; }
 
 /* ── Painel base ── */
