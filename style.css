@@ -426,10 +426,10 @@ body {
   text-shadow: var(--glow-fraco);
 }
 
-/* ─── CORPO DO JOGO — tela cheia ─── */
-html, body { height: 100%; overflow: hidden; }
-
-body {
+/* ─── CORPO DO JOGO — tela cheia (só jogo.html) ─── */
+body.pagina-jogo {
+  height: 100vh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
