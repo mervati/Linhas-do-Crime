@@ -429,6 +429,7 @@ body {
 /* ─── CORPO DO JOGO — tela cheia (só jogo.html) ─── */
 body.pagina-jogo {
   height: 100vh;
+  max-height: 100vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -436,6 +437,7 @@ body.pagina-jogo {
 
 .jogo-corpo {
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -501,6 +503,7 @@ body.academia .cursor-digitando {
 /* ─── GRADE PRINCIPAL: 4 colunas ─── */
 .grade-principal {
   flex: 1;
+  min-height: 0;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1.2fr;
   gap: 0;
@@ -510,6 +513,7 @@ body.academia .cursor-digitando {
 .coluna {
   display: flex;
   flex-direction: column;
+  min-height: 0;
   border-right: 1px solid var(--borda);
   padding: 0.8rem;
   overflow: hidden;
@@ -519,6 +523,7 @@ body.academia .cursor-digitando {
 
 .coluna-cards {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -1321,11 +1326,11 @@ body.academia .cursor-digitando {
 
 /* ─── RESPONSIVO ─── */
 @media (max-width: 900px) {
-  html, body { overflow: auto; height: auto; }
-  .jogo-corpo { overflow: visible; }
-  .grade-principal { grid-template-columns: 1fr 1fr; overflow: visible; }
-  .coluna { overflow: visible; border-right: none; border-bottom: 1px solid var(--borda); }
-  .coluna-cards { overflow: visible; }
+  body.pagina-jogo { overflow: auto; height: auto; max-height: none; }
+  .jogo-corpo { overflow: visible; min-height: unset; }
+  .grade-principal { grid-template-columns: 1fr 1fr; overflow: visible; min-height: unset; }
+  .coluna { overflow: visible; min-height: unset; border-right: none; border-bottom: 1px solid var(--borda); }
+  .coluna-cards { overflow: visible; min-height: unset; }
   .grade-cards { grid-template-columns: 1fr; }
   .jogo-header { padding: 0.6rem 1rem; }
   .painel { padding: 1.5rem; }
