@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Marcador de Tempo — Linhas do Crime</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0a0a14;
+      color: #e0e0e0;
+      font-family: 'Courier New', monospace;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+    h1 { color: #00ff41; font-size: 1.2rem; margin-bottom: 0.3rem; }
+    .subtitulo { color: #007722; font-size: 0.85rem; margin-bottom: 2rem; }
+
+    .secao { margin-bottom: 1.5rem; }
+    label { display: block; color: #00aa22; font-size: 0.8rem; margin-bottom: 0.4rem; letter-spacing: 0.1em; }
+
+    textarea, input[type="text"], select {
+      width: 100%;
+      background: #111;
+      border: 1px solid #333;
+      color: #e0e0e0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      padding: 0.6rem;
+      outline: none;
+    }
+    textarea { height: 120px; resize: vertical; }
+    textarea:focus, input:focus { border-color: #00ff41; }
+
+    .linha { display: flex; gap: 1rem; align-items: flex-end; }
+    .linha > * { flex: 1; }
+
+    button {
+      background: #003300;
+      color: #00ff41;
+      border: 1px solid #00aa22;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      padding: 0.6rem 1.2rem;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    button:hover { background: #005500; }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+    button.danger { color: #ff4444; border-color: #aa2222; background: #1a0000; }
+    button.danger:hover { background: #2a0000; }
+
+    /* Player */
+    .player {
+      background: #0d0d1a;
+      border: 1px solid #333;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .player-tempo {
+      font-size: 1.4rem;
+      color: #00ff41;
+      font-weight: bold;
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.1em;
+    }
+    .barra-progresso {
+      width: 100%;
+      height: 6px;
+      background: #222;
+      border-radius: 3px;
+      margin-bottom: 0.8rem;
+      cursor: pointer;
+      position: relative;
+    }
+    .barra-fill {
+      height: 100%;
+      background: #00ff41;
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.1s;
+    }
+    .player-controles { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
+    /* Frases */
+    .frases-container { margin-bottom: 1rem; }
+    .frase-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.5rem 0.7rem;
+      border-left: 3px solid #222;
+      margin-bottom: 0.3rem;
+      background: #0d0d0d;
+      font-size: 0.88rem;
+      color: #aaa;
+      transition: all 0.2s;
+    }
+    .frase-item.marcada { border-left-color: #00ff41; color: #e0e0e0; }
+    .frase-item.atual   { border-left-color: #00ff41; background: #001a00; color: #00ff41; }
+    .frase-tempo {
+      font-size: 0.75rem;
+      color: #00aa22;
+      min-width: 55px;
+      font-weight: bold;
+    }
+    .frase-texto { flex: 1; }
+    .frase-btn-reset {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.4rem;
+      background: transparent;
+      color: #555;
+      border: 1px solid #333;
+    }
+    .frase-btn-reset:hover { color: #ff4444; border-color: #ff4444; }
+
+    /* Resultado */
+    .resultado {
+      background: #0d1a0d;
+      border: 1px solid #00aa22;
+      padding: 1rem;
+      margin-top: 1.5rem;
+    }
+    .resultado h2 { color: #00ff41; font-size: 0.9rem; margin-bottom: 0.8rem; }
+    pre {
+      background: #000;
+      border: 1px solid #222;
+      padding: 1rem;
+      font-size: 0.8rem;
+      color: #00ff41;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .instrucoes {
+      background: #0a100a;
+      border: 1px solid #1a3a1a;
+      padding: 0.8rem 1rem;
+      font-size: 0.8rem;
+      color: #669966;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+    .instrucoes strong { color: #00ff41; }
+
+    .aviso { color: #ffaa00; font-size: 0.8rem; margin-top: 0.4rem; }
+
+    #status-audio { font-size: 0.8rem; color: #555; margin-top: 0.3rem; }
+    #status-audio.ok { color: #00aa22; }
+  </style>
+</head>
+<body>
+
+<h1>🎙 Marcador de Tempo — Linhas do Crime</h1>
+<p class="subtitulo">Ferramenta para gerar timestamps de narração sincronizada.</p>
+
+<div class="instrucoes">
+  <strong>Como usar:</strong><br>
+  1. Selecione o arquivo de áudio (MP3 ou M4A).<br>
+  2. Cole o texto da narração na caixa e clique em <strong>Dividir em Frases</strong>.<br>
+  3. Clique em <strong>Play</strong> para iniciar o áudio.<br>
+  4. A cada início de nova frase, pressione <strong>Espaço</strong> ou clique em <strong>Marcar</strong>.<br>
+  5. Ao terminar, copie o JSON gerado e cole no arquivo do caso.
+</div>
+
+<!-- Áudio -->
+<div class="secao">
+  <label>ARQUIVO DE ÁUDIO (MP3 ou M4A)</label>
+  <div class="linha">
+    <div>
+      <input type="file" id="input-audio" accept=".mp3,.m4a,.ogg,.wav" style="color:#aaa;background:#111;border:1px solid #333;padding:0.5rem;width:100%;" />
+      <div id="status-audio">Nenhum arquivo selecionado.</div>
+    </div>
+  </div>
+  <audio id="audio-player"></audio>
+</div>
+
+<!-- Texto -->
+<div class="secao">
+  <label>TIPO DE CONTEÚDO</label>
+  <select id="tipo-conteudo" style="max-width:300px;">
+    <option value="intro">Introdução do jogo</option>
+    <option value="caso">Narração do caso</option>
+  </select>
+</div>
+
+<div class="secao">
+  <label>TEXTO DA NARRAÇÃO (uma frase por linha ou parágrafo)</label>
+  <textarea id="input-texto" placeholder="Cole aqui o texto da narração..."></textarea>
+  <div style="margin-top:0.6rem;display:flex;gap:0.6rem;">
+    <button onclick="dividirFrases()">Dividir em Frases</button>
+    <button class="danger" onclick="limparTudo()">Limpar Tudo</button>
+  </div>
+</div>
+
+<!-- Player -->
+<div class="player" id="player-container" style="display:none;">
+  <div class="player-tempo" id="tempo-display">00:00.0</div>
+  <div class="barra-progresso" id="barra" onclick="clicarBarra(event)">
+    <div class="barra-fill" id="barra-fill"></div>
+  </div>
+  <div class="player-controles">
+    <button id="btn-play" onclick="togglePlay()">▶ Play</button>
+    <button onclick="voltarInicio()">⏮ Início</button>
+    <button onclick="marcarTempo()" style="background:#002200;color:#00ff41;border-color:#00ff41;font-weight:bold;">
+      ⏱ Marcar (Espaço)
+    </button>
+    <button onclick="desfazerUltima()" class="danger">↩ Desfazer</button>
+  </div>
+  <div style="margin-top:0.5rem;font-size:0.78rem;color:#445;">
+    Próxima frase a marcar: <span id="prox-frase" style="color:#00aa22;"></span>
+  </div>
+</div>
+
+<!-- Lista de frases -->
+<div id="frases-container" class="frases-container"></div>
+
+<!-- Resultado JSON -->
+<div class="resultado" id="resultado" style="display:none;">
+  <h2>📋 JSON Gerado — cole no arquivo do caso</h2>
+  <div style="display:flex;gap:0.6rem;margin-bottom:0.8rem;">
+    <button onclick="copiarJSON()">📋 Copiar JSON</button>
+    <button onclick="gerarJSON()">🔄 Regenerar</button>
+  </div>
+  <pre id="output-json"></pre>
+</div>
+
+<script>
+  var audio       = document.getElementById("audio-player");
+  var frases      = [];  // { texto, tempo }
+  var fraseAtual  = 0;   // índice da próxima frase a ser marcada
+  var ultimaMarca = null;
+
+  // ── Carregar áudio ──
+  document.getElementById("input-audio").addEventListener("change", function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var url = URL.createObjectURL(file);
+    audio.src = url;
+    audio.load();
+    var st = document.getElementById("status-audio");
+    st.textContent = "✓ Carregado: " + file.name;
+    st.className = "ok";
+    document.getElementById("player-container").style.display = "block";
+  });
+
+  // ── Atualizar display de tempo ──
+  audio.addEventListener("timeupdate", function() {
+    var t = audio.currentTime;
+    var min = Math.floor(t / 60);
+    var sec = (t % 60).toFixed(1);
+    if (sec < 10) sec = "0" + sec;
+    document.getElementById("tempo-display").textContent =
+      (min < 10 ? "0" : "") + min + ":" + sec;
+    document.getElementById("barra-fill").style.width =
+      (audio.duration ? (t / audio.duration * 100) : 0) + "%";
+
+    // Destaca frase atual no display
+    for (var i = frases.length - 1; i >= 0; i--) {
+      if (frases[i].tempo !== null && t >= frases[i].tempo) {
+        atualizarFraseAtualDisplay(i);
+        break;
+      }
+    }
+  });
+
+  audio.addEventListener("play",  function() { document.getElementById("btn-play").textContent = "⏸ Pause"; });
+  audio.addEventListener("pause", function() { document.getElementById("btn-play").textContent = "▶ Play"; });
+  audio.addEventListener("ended", function() { gerarJSON(); });
+
+  function togglePlay() {
+    if (audio.paused) audio.play(); else audio.pause();
+  }
+
+  function voltarInicio() {
+    audio.currentTime = 0;
+    audio.pause();
+  }
+
+  function clicarBarra(e) {
+    if (!audio.duration) return;
+    var rect = document.getElementById("barra").getBoundingClientRect();
+    audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+  }
+
+  // ── Dividir texto em frases ──
+  function dividirFrases() {
+    var texto = document.getElementById("input-texto").value.trim();
+    if (!texto) return alert("Cole o texto primeiro.");
+
+    // Divide por ponto final, ! ou ? seguido de espaço/nova linha, ou por nova linha explícita
+    var partes = texto
+      .split(/(?<=[.!?])\s+|\n+/)
+      .map(function(s) { return s.trim(); })
+      .filter(function(s) { return s.length > 2; });
+
+    frases = partes.map(function(t) { return { texto: t, tempo: null }; });
+    fraseAtual = 0;
+    renderizarFrases();
+    document.getElementById("resultado").style.display = "none";
+  }
+
+  function renderizarFrases() {
+    var c = document.getElementById("frases-container");
+    c.innerHTML = "";
+
+    frases.forEach(function(f, i) {
+      var div = document.createElement("div");
+      div.className = "frase-item" + (f.tempo !== null ? " marcada" : "");
+      div.id = "frase-" + i;
+
+      var tempo = document.createElement("span");
+      tempo.className = "frase-tempo";
+      tempo.textContent = f.tempo !== null ? formatarTempo(f.tempo) : "--:--.--";
+
+      var texto = document.createElement("span");
+      texto.className = "frase-texto";
+      texto.textContent = (i + 1) + ". " + f.texto;
+
+      var btn = document.createElement("button");
+      btn.className = "frase-btn-reset";
+      btn.textContent = "✕";
+      btn.title = "Resetar tempo desta frase";
+      btn.onclick = (function(idx) {
+        return function(e) {
+          e.stopPropagation();
+          frases[idx].tempo = null;
+          if (idx < fraseAtual) fraseAtual = idx;
+          renderizarFrases();
+        };
+      })(i);
+
+      div.appendChild(tempo);
+      div.appendChild(texto);
+      div.appendChild(btn);
+      c.appendChild(div);
+    });
+
+    atualizarProximaFrase();
+  }
+
+  function atualizarFraseAtualDisplay(idx) {
+    document.querySelectorAll(".frase-item").forEach(function(el) {
+      el.classList.remove("atual");
+    });
+    var el = document.getElementById("frase-" + idx);
+    if (el) {
+      el.classList.add("atual");
+      el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+  }
+
+  function atualizarProximaFrase() {
+    var el = document.getElementById("prox-frase");
+    if (!el) return;
+    var prox = frases[fraseAtual];
+    el.textContent = prox
+      ? (fraseAtual + 1) + ". " + prox.texto.substring(0, 60) + (prox.texto.length > 60 ? "..." : "")
+      : "✓ Todas marcadas!";
+  }
+
+  // ── Marcar tempo ──
+  function marcarTempo() {
+    if (fraseAtual >= frases.length) {
+      gerarJSON();
+      return;
+    }
+    var t = audio.currentTime;
+    ultimaMarca = { idx: fraseAtual, tempo: t };
+    frases[fraseAtual].tempo = t;
+
+    var el = document.getElementById("frase-" + fraseAtual);
+    if (el) {
+      el.classList.add("marcada");
+      el.querySelector(".frase-tempo").textContent = formatarTempo(t);
+      el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+
+    fraseAtual++;
+    atualizarProximaFrase();
+
+    if (fraseAtual >= frases.length) {
+      gerarJSON();
+    }
+  }
+
+  function desfazerUltima() {
+    if (!ultimaMarca) return;
+    frases[ultimaMarca.idx].tempo = null;
+    fraseAtual = ultimaMarca.idx;
+    ultimaMarca = null;
+    renderizarFrases();
+  }
+
+  // ── Gerar JSON ──
+  function gerarJSON() {
+    var tipo   = document.getElementById("tipo-conteudo").value;
+    var marcas = frases
+      .filter(function(f) { return f.tempo !== null; })
+      .map(function(f) { return { tempo: parseFloat(f.tempo.toFixed(2)), texto: f.texto }; });
+
+    if (marcas.length === 0) return;
+
+    var chave = tipo === "intro" ? "narracao_intro" : "narracao";
+    var json  = JSON.stringify({ [chave]: marcas }, null, 2);
+
+    document.getElementById("output-json").textContent = json;
+    document.getElementById("resultado").style.display = "block";
+    document.getElementById("resultado").scrollIntoView({ behavior: "smooth" });
+  }
+
+  function copiarJSON() {
+    var txt = document.getElementById("output-json").textContent;
+    navigator.clipboard.writeText(txt).then(function() {
+      alert("JSON copiado para a área de transferência!");
+    });
+  }
+
+  function limparTudo() {
+    frases = [];
+    fraseAtual = 0;
+    ultimaMarca = null;
+    document.getElementById("frases-container").innerHTML = "";
+    document.getElementById("input-texto").value = "";
+    document.getElementById("resultado").style.display = "none";
+    audio.pause();
+    audio.currentTime = 0;
+  }
+
+  // ── Tecla Espaço ──
+  document.addEventListener("keydown", function(e) {
+    if (e.code === "Space" && e.target.tagName !== "TEXTAREA" && e.target.tagName !== "INPUT") {
+      e.preventDefault();
+      marcarTempo();
+    }
+  });
+
+  function formatarTempo(t) {
+    var min = Math.floor(t / 60);
+    var sec = (t % 60).toFixed(1);
+    if (sec < 10) sec = "0" + sec;
+    return (min < 10 ? "0" : "") + min + ":" + sec;
+  }
+</script>
+
+</body>
+</html>

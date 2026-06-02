@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Linhas do Crime</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      background: #000;
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+    }
+
+    /* ── Tela de clique para iniciar ── */
+    #tela-inicio-audio {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      cursor: pointer;
+      transition: opacity 0.6s;
+    }
+
+    #tela-inicio-audio .logo {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 2.2rem;
+      color: #fff;
+      letter-spacing: 0.15em;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 0 30px rgba(255,255,255,0.3);
+    }
+
+    #tela-inicio-audio .instrucao {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.85rem;
+      color: #555;
+      letter-spacing: 0.3em;
+      animation: piscar-instrucao 1.5s step-end infinite;
+    }
+
+    @keyframes piscar-instrucao {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    /* ── Container principal ── */
+    #intro-container {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8vw 12vw;
+      background: #000;
+      opacity: 0;
+      transition: opacity 0.6s;
+    }
+
+    #intro-container.visivel { opacity: 1; }
+
+    /* ── Linhas de texto ── */
+    #intro-linhas {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .intro-linha {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: clamp(1.2rem, 2.8vw, 2.2rem);
+      color: #ffffff;
+      line-height: 1.5;
+      letter-spacing: 0.04em;
+      transition: opacity 0.8s;
+      min-height: 1.5em;
+    }
+
+    .intro-cursor {
+      color: #fff;
+      animation: piscar-cursor-intro 0.6s step-end infinite;
+    }
+
+    @keyframes piscar-cursor-intro {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    /* ── Barra de progresso ── */
+    #intro-barra {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      background: #fff;
+      width: 0%;
+      transition: width 0.2s linear;
+      opacity: 0.4;
+    }
+
+    /* ── Botão pular ── */
+    #btn-pular {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 2rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      color: #444;
+      background: transparent;
+      border: 1px solid #222;
+      padding: 0.4rem 1rem;
+      cursor: pointer;
+      letter-spacing: 0.1em;
+      transition: color 0.2s, border-color 0.2s;
+      text-transform: uppercase;
+    }
+
+    #btn-pular:hover { color: #aaa; border-color: #555; }
+
+    /* ── Fade out final ── */
+    #intro-container.saindo { opacity: 0; transition: opacity 1s; }
+  </style>
+</head>
+<body>
+
+<!-- Tela inicial: clique para começar (necessário para autoplay de áudio) -->
+<div id="tela-inicio-audio">
+  <div class="logo">Linhas do Crime</div>
+  <div class="instrucao">Clique para iniciar</div>
+</div>
+
+<!-- Container da introdução -->
+<div id="intro-container">
+  <div id="intro-linhas"></div>
+</div>
+
+<div id="intro-barra"></div>
+<button id="btn-pular">Pular Introdução →</button>
+
+<audio id="audio-intro" preload="auto">
+  <source src="assets/audio/intro.m4a" type="audio/mp4" />
+  <source src="assets/audio/intro.mp3" type="audio/mpeg" />
+</audio>
+
+<audio id="audio-musica" loop preload="auto">
+  <source src="assets/audio/música inicio.mp3" type="audio/mpeg" />
+</audio>
+
+<script src="tema.js"></script>
+<script>Tema.carregar();</script>
+
+<script>
+  // ── Dados da narração ──
+  var NARRACAO = [
+    { tempo:  0.01, texto: "Uma sala silenciosa." },
+    { tempo:  2.01, texto: "A fumaça de um café." },
+    { tempo:  4.28, texto: "E um caso que ninguém conseguiu resolver." },
+    { tempo:  7.61, texto: "Na mesa de investigação, resta apenas você, e o seu Caderno de Notas." },
+    { tempo: 13.25, texto: "Bem-vindo ao Linhas do Crime." },
+    { tempo: 16.57, texto: "Aqui, o caos se transforma em ordem." },
+    { tempo: 19.97, texto: "Cada depoimento esconde uma contradição." },
+    { tempo: 23.25, texto: "Cada álibi, uma falha." },
+    { tempo: 25.75, texto: "Abra o caderno." },
+    { tempo: 27.64, texto: "Analise os suspeitos, as armas, e os locais." },
+    { tempo: 31.80, texto: "Cada marcação é decisiva." },
+    { tempo: 34.93, texto: "Um X para eliminar quem mente, um visto para cravar a verdade." },
+    { tempo: 39.46, texto: "Não há espaço para palpites vazios." },
+    { tempo: 42.72, texto: "Apenas lógica, pura, e fria." },
+    { tempo: 46.25, texto: "Quem estava lá?" },
+    { tempo: 48.41, texto: "Quem tinha o motivo?" },
+    { tempo: 50.24, texto: "E quem está tentando te enganar?" },
+    { tempo: 53.04, texto: "Consulte as pistas." },
+    { tempo: 55.20, texto: "Preencha a sua tabela." },
+    { tempo: 57.76, texto: "E isole o culpado." },
+    { tempo: 60.14, texto: "No Linhas do Crime, a resposta para o assassinato está na ponta do seu lápis." }
+  ];
+
+  var MAXIMO_LINHAS   = 6;
+  var sentencaExibida = -1;
+  var cursorEl        = null;
+  var timerDigitacao  = null;
+  var textoAtual      = "";   // texto completo da sentença sendo digitada
+  var charIdxAtual    = 0;    // quantos chars já foram digitados
+
+  var audio   = document.getElementById("audio-intro");
+  var musica  = document.getElementById("audio-musica");
+  var container = document.getElementById("intro-container");
+  var linhasEl  = document.getElementById("intro-linhas");
+
+  musica.volume = 0.10; // volume baixo para não cobrir a narração
+
+  // ── Parâmetros da URL ──
+  var params   = new URLSearchParams(window.location.search);
+  var casoId   = params.get("caso")  || "20260001";
+  var modo     = params.get("modo")  || "historia";
+  var destino  = "jogo.html?caso=" + casoId + "&modo=" + modo;
+
+  // ── Clique para iniciar ──
+  document.getElementById("tela-inicio-audio").addEventListener("click", function() {
+    this.style.opacity = "0";
+    var self = this;
+    setTimeout(function() { self.style.display = "none"; }, 600);
+    container.classList.add("visivel");
+    audio.play();
+    musica.play().catch(function() {}); // inicia música de fundo
+  });
+
+  // ── Sync com o áudio ──
+  audio.addEventListener("timeupdate", function() {
+    var t = audio.currentTime;
+
+    // Barra de progresso
+    if (audio.duration) {
+      document.getElementById("intro-barra").style.width =
+        (t / audio.duration * 100) + "%";
+    }
+
+    // Verifica se nova sentença deve aparecer
+    for (var i = NARRACAO.length - 1; i >= 0; i--) {
+      if (t >= NARRACAO[i].tempo && i > sentencaExibida) {
+        exibirSentenca(i);
+        break;
+      }
+    }
+  });
+
+  audio.addEventListener("ended", function() {
+    // Aguarda 2 segundos após o fim e navega
+    setTimeout(navegarParaJogo, 2000);
+  });
+
+  // ── Exibe uma sentença com efeito de digitação ──
+  function exibirSentenca(idx) {
+    sentencaExibida = idx;
+    var frase = NARRACAO[idx];
+
+    // PASSO 1: Completa a linha ANTERIOR antes de qualquer outra coisa
+    // (cursorEl ainda aponta para o cursor da linha anterior)
+    if (timerDigitacao) {
+      clearInterval(timerDigitacao);
+      timerDigitacao = null;
+      if (cursorEl && textoAtual) {
+        cursorEl.insertAdjacentText("beforebegin", textoAtual.slice(charIdxAtual));
+      }
+    }
+
+    // PASSO 2: Remove o cursor antigo
+    if (cursorEl) cursorEl.remove();
+
+    // PASSO 3: Calcula velocidade da nova frase
+    var proxTempo = (NARRACAO[idx + 1]) ? NARRACAO[idx + 1].tempo : frase.tempo + 6;
+    var duracao   = proxTempo - frase.tempo;
+    var velChar   = Math.max(20, Math.floor((duracao * 1000) / frase.texto.length));
+
+    // PASSO 4: Cria nova linha e novo cursor
+    var linha  = document.createElement("div");
+    linha.className = "intro-linha";
+    linhasEl.appendChild(linha);
+
+    cursorEl = document.createElement("span");
+    cursorEl.className = "intro-cursor";
+    cursorEl.textContent = "▌";
+    linha.appendChild(cursorEl);
+
+    // Limita o número de linhas visíveis
+    var todasLinhas = linhasEl.querySelectorAll(".intro-linha");
+    if (todasLinhas.length > MAXIMO_LINHAS) {
+      var antiga = todasLinhas[0];
+      antiga.style.opacity = "0";
+      setTimeout(function() { if (antiga.parentNode) antiga.remove(); }, 800);
+    }
+
+    // Atenua linhas anteriores progressivamente
+    var visiveis = linhasEl.querySelectorAll(".intro-linha");
+    for (var j = 0; j < visiveis.length - 1; j++) {
+      var opacidade = Math.max(0.15, 0.9 - (visiveis.length - 1 - j) * 0.18);
+      visiveis[j].style.opacity = opacidade;
+    }
+
+    // Digita a nova frase caractere a caractere
+    textoAtual   = frase.texto;
+    charIdxAtual = 0;
+
+    timerDigitacao = setInterval(function() {
+      if (charIdxAtual < textoAtual.length) {
+        cursorEl.insertAdjacentText("beforebegin", textoAtual[charIdxAtual]);
+        charIdxAtual++;
+      } else {
+        clearInterval(timerDigitacao);
+        timerDigitacao = null;
+      }
+    }, velChar);
+  }
+
+  // ── Fade out da música ──
+  function fadeOutMusica(duracaoMs) {
+    if (musica.paused) return;
+    var passos   = 30;
+    var intervalo = duracaoMs / passos;
+    var decremento = musica.volume / passos;
+    var fade = setInterval(function() {
+      if (musica.volume > decremento) {
+        musica.volume -= decremento;
+      } else {
+        musica.volume = 0;
+        musica.pause();
+        clearInterval(fade);
+      }
+    }, intervalo);
+  }
+
+  // ── Navegação ──
+  function navegarParaJogo() {
+    fadeOutMusica(900);
+    container.classList.add("saindo");
+    setTimeout(function() {
+      window.location.href = destino;
+    }, 1000);
+  }
+
+  document.getElementById("btn-pular").addEventListener("click", function() {
+    audio.pause();
+    navegarParaJogo();
+  });
+</script>
+
+</body>
+</html>

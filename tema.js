@@ -24,3 +24,37 @@ const Tema = {
   }
 
 };
+
+const Zoom = {
+
+  NIVEIS: ["normal", "menos", "mais"],
+  ROTULOS: { normal: "A", menos: "A−", mais: "A+" },
+  TITULOS: { normal: "Tamanho normal", menos: "Texto menor", mais: "Texto maior" },
+
+  carregar: function() {
+    const salvo = localStorage.getItem("ldc_zoom") || "normal";
+    this.aplicar(salvo);
+  },
+
+  ciclar: function() {
+    const atual = localStorage.getItem("ldc_zoom") || "normal";
+    const idx   = this.NIVEIS.indexOf(atual);
+    const prox  = this.NIVEIS[(idx + 1) % this.NIVEIS.length];
+    this.aplicar(prox);
+  },
+
+  aplicar: function(nivel) {
+    document.body.classList.remove("zoom-menos", "zoom-mais");
+    if (nivel !== "normal") document.body.classList.add("zoom-" + nivel);
+    localStorage.setItem("ldc_zoom", nivel);
+    this.atualizarBotao(nivel);
+  },
+
+  atualizarBotao: function(nivel) {
+    const btn = document.getElementById("btn-zoom");
+    if (!btn) return;
+    btn.textContent = this.ROTULOS[nivel] || "A";
+    btn.title       = this.TITULOS[nivel] || "Tamanho do texto";
+  }
+
+};

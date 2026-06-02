@@ -13,8 +13,12 @@
   <button class="btn-voltar" id="btn-voltar-header">← Voltar</button>
   <span class="caso-numero" id="caso-numero"></span>
   <h1 class="caso-titulo" id="caso-titulo"></h1>
+  <button class="btn-audio" id="btn-audio" title="Narração">🔊</button>
+  <button class="btn-zoom" id="btn-zoom" onclick="Zoom.ciclar()">A</button>
   <button class="btn-tema" onclick="Tema.alternar()">🪶 Academia</button>
 </header>
+
+<audio id="audio-caso" preload="auto"></audio>
 
 <!-- Corpo do jogo -->
 <main class="jogo-corpo">
@@ -148,7 +152,7 @@
 <script src="motor.js"></script>
 <script src="caderno.js"></script>
 <script src="tema.js"></script>
-<script>Tema.carregar();</script>
+<script>Tema.carregar(); Zoom.carregar();</script>
 
 <script>
   // ── Lê parâmetros da URL ──
@@ -177,6 +181,37 @@
   // ── Botão voltar ──
   document.getElementById("btn-voltar-header").addEventListener("click", function() {
     window.location.href = "index.html";
+  });
+
+  // ── Áudio do caso ──
+  var audioCaso = document.getElementById("audio-caso");
+  var btnAudio  = document.getElementById("btn-audio");
+
+  audioCaso.volume = 0.85;
+
+  // Tenta MP3 primeiro, depois M4A
+  var baseAudio = "assets/audio/caso-" + casoId;
+  audioCaso.innerHTML =
+    "<source src='" + baseAudio + ".mp3' type='audio/mpeg'>" +
+    "<source src='" + baseAudio + ".m4a' type='audio/mp4'>";
+  audioCaso.load();
+
+  audioCaso.addEventListener("canplaythrough", function() {
+    audioCaso.play().catch(function() {});
+  });
+
+  audioCaso.addEventListener("error", function() {
+    btnAudio.style.display = "none";
+  });
+
+  btnAudio.addEventListener("click", function() {
+    if (audioCaso.paused) {
+      audioCaso.play();
+      btnAudio.textContent = "🔊";
+    } else {
+      audioCaso.pause();
+      btnAudio.textContent = "🔇";
+    }
   });
 
   // ── Inicia o motor e o caderno ──

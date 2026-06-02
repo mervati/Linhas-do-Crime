@@ -441,6 +441,83 @@ body.academia .galeria-item {
   flex-shrink: 0;
 }
 
+/* ─── BOTÃO ZOOM ─── */
+.btn-zoom {
+  background: transparent;
+  color: var(--verde-dim);
+  border: 1px solid var(--borda);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s, border-color 0.15s;
+  letter-spacing: 0.05em;
+}
+
+.btn-zoom:hover { color: var(--branco); border-color: var(--branco); }
+
+body.academia .btn-zoom { color: #c8a84b; border-color: #c8a84b; }
+
+/* ─── ZOOM MENOS ─── */
+body.zoom-menos .card h3               { font-size: 0.58rem; }
+body.zoom-menos .card ul               { font-size: 0.78rem; }
+body.zoom-menos .card .detalhe,
+body.zoom-menos .card-info p           { font-size: 0.76rem; }
+body.zoom-menos .card .peso,
+body.zoom-menos .card .ambiente        { font-size: 0.5rem; }
+body.zoom-menos .card-suspeito h3      { font-size: 0.52rem; }
+body.zoom-menos .card-suspeito .card ul { font-size: 0.72rem; }
+body.zoom-menos .card-suspeito .card-info p { font-size: 0.7rem; }
+body.zoom-menos .card-arma h3,
+body.zoom-menos .card-local h3         { font-size: 0.62rem; }
+body.zoom-menos .card-arma .card ul,
+body.zoom-menos .card-local .card ul   { font-size: 0.82rem; }
+body.zoom-menos .card-arma .card-info p,
+body.zoom-menos .card-local .card-info p { font-size: 0.8rem; }
+body.zoom-menos #historia              { font-size: 0.88rem; }
+body.zoom-menos .pista                 { font-size: 0.85rem; padding: 0.4rem 0.8rem 0.4rem 1.8rem; }
+body.zoom-menos .secao-titulo          { font-size: 0.65rem; }
+body.zoom-menos .caso-titulo           { font-size: 0.82rem; }
+body.zoom-menos .coluna                { padding: 0.5rem; }
+
+/* ─── ZOOM MAIS ─── */
+body.zoom-mais .card h3                { font-size: 0.88rem; }
+body.zoom-mais .card ul                { font-size: 1.1rem; }
+body.zoom-mais .card .detalhe,
+body.zoom-mais .card-info p            { font-size: 1.05rem; }
+body.zoom-mais .card .peso,
+body.zoom-mais .card .ambiente         { font-size: 0.72rem; }
+body.zoom-mais .card-suspeito h3       { font-size: 0.78rem; }
+body.zoom-mais .card-suspeito .card ul { font-size: 1rem; }
+body.zoom-mais .card-suspeito .card-info p { font-size: 0.98rem; }
+body.zoom-mais .card-arma h3,
+body.zoom-mais .card-local h3          { font-size: 0.95rem; }
+body.zoom-mais .card-arma .card ul,
+body.zoom-mais .card-local .card ul    { font-size: 1.2rem; }
+body.zoom-mais .card-arma .card-info p,
+body.zoom-mais .card-local .card-info p { font-size: 1.15rem; }
+body.zoom-mais #historia               { font-size: 1.2rem; }
+body.zoom-mais .pista                  { font-size: 1.15rem; padding: 0.7rem 1rem 0.7rem 2.5rem; }
+body.zoom-mais .secao-titulo           { font-size: 0.88rem; }
+body.zoom-mais .caso-titulo            { font-size: 1.1rem; }
+body.zoom-mais .coluna                 { padding: 1rem; }
+
+.btn-audio {
+  background: transparent;
+  color: var(--verde-dim);
+  border: 1px solid var(--borda);
+  font-size: 0.9rem;
+  padding: 0.35rem 0.6rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.btn-audio:hover { color: var(--branco); border-color: var(--branco); }
+body.academia .btn-audio { color: #c8a84b; border-color: #c8a84b; }
+
 .btn-voltar {
   background: transparent;
   color: var(--verde-dim);

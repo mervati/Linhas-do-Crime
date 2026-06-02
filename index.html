@@ -211,11 +211,10 @@
     const concluidos = Progresso.casosConcluidos();
 
     registroCasos.forEach(function(id) {
-      const desbloqueado = Progresso.estaDesbloqueado(id, registroCasos);
       const concluido = concluidos.includes(id);
 
       const item = document.createElement("div");
-      item.className = "item-caso" + (desbloqueado ? "" : " bloqueado");
+      item.className = "item-caso"; // Modo Livre: todos disponíveis
 
       item.innerHTML =
         "<div>" +
@@ -223,17 +222,15 @@
           "<div class='item-caso-titulo'>Carregando...</div>" +
         "</div>" +
         "<div class='item-caso-status" + (concluido ? " concluido" : "") + "'>" +
-          (concluido ? "Concluído ✓" : desbloqueado ? "Disponível" : "Bloqueado 🔒") +
+          (concluido ? "Concluído ✓" : "Disponível") +
         "</div>";
 
-      if (desbloqueado) {
-        item.addEventListener("click", function() {
+      item.addEventListener("click", function() {
           document.querySelectorAll(".item-caso").forEach(function(i) { i.style.borderColor = ""; });
           item.style.borderColor = "var(--dourado)";
           casoEscolhido = id;
           btnJogar.disabled = false;
         });
-      }
 
       container.appendChild(item);
     });
@@ -256,7 +253,11 @@
 
   btnJogar.addEventListener("click", function() {
     if (!casoEscolhido) return;
-    window.location.href = "jogo.html?caso=" + casoEscolhido + "&modo=" + modoEscolhido;
+    if (modoEscolhido === "historia") {
+      window.location.href = "intro.html?caso=" + casoEscolhido + "&modo=" + modoEscolhido;
+    } else {
+      window.location.href = "jogo.html?caso=" + casoEscolhido + "&modo=" + modoEscolhido;
+    }
   });
 
   // ── Verifica se jogador já tem cadastro salvo ──
