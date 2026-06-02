@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Linhas do Crime</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- Cabeçalho do caso -->
+<header class="jogo-header">
+  <button class="btn-voltar" id="btn-voltar-header">← Voltar</button>
+  <span class="caso-numero" id="caso-numero"></span>
+  <h1 class="caso-titulo" id="caso-titulo"></h1>
+  <button class="btn-tema" onclick="Tema.alternar()">🪶 Academia</button>
+</header>
+
+<!-- Corpo do jogo -->
+<main class="jogo-corpo">
+
+  <!-- História: faixa no topo -->
+  <div class="faixa-historia">
+    <span class="secao-titulo">O Caso</span>
+    <p id="historia"></p>
+  </div>
+
+  <!-- Grade principal: 4 colunas -->
+  <div class="grade-principal">
+
+    <!-- Coluna 1: Suspeitos -->
+    <div class="coluna">
+      <p class="secao-titulo">Suspeitos</p>
+      <div class="coluna-cards" id="suspeitos"></div>
+    </div>
+
+    <!-- Coluna 2: Armas -->
+    <div class="coluna">
+      <p class="secao-titulo">Armas</p>
+      <div class="coluna-cards" id="armas"></div>
+    </div>
+
+    <!-- Coluna 3: Locais -->
+    <div class="coluna">
+      <p class="secao-titulo">Locais</p>
+      <div class="coluna-cards" id="locais"></div>
+    </div>
+
+    <!-- Coluna 4: Pistas + Acusação -->
+    <div class="coluna coluna-pistas">
+      <p class="secao-titulo">Pistas</p>
+      <div class="coluna-cards" id="pistas"></div>
+      <div class="container-acusar">
+        <button class="btn-caderno" id="btn-caderno">📝 Caderno de Anotações</button>
+        <button class="btn-acusar" id="btn-acusar">⚖ Formular Acusação</button>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<!-- Modal: Caderno de Anotações -->
+<div class="modal oculto" id="modal-caderno">
+  <div class="modal-caderno-conteudo">
+    <div class="modal-caderno-header">
+      <h2>📝 Caderno de Anotações</h2>
+      <p class="caderno-instrucao">Clique em uma célula para ciclar: Vazio → <span class="txt-x">✕ Descarte</span> → <span class="txt-v">✓ Confirmado</span> → Vazio. Ao confirmar, o jogo preenche automaticamente os descartes.</p>
+      <div class="caderno-header-acoes">
+        <button class="btn-limpar-tudo" id="btn-limpar-tudo">🗑 Limpar Tudo</button>
+        <button class="btn-fechar-caderno" id="btn-fechar-caderno">✕ Fechar</button>
+      </div>
+    </div>
+    <div id="caderno-conteudo"></div>
+
+    <div class="caderno-footer">
+      <button class="btn-acusar-caderno" id="btn-acusar-caderno">⚖ Formular Acusação pelo Caderno</button>
+    </div>
+  </div>
+</div>
+
+<!-- Popup de confirmação da acusação pelo caderno -->
+<div class="popup-confirmacao oculto" id="popup-acusacao-caderno">
+  <div class="popup-conteudo">
+    <h3 class="popup-titulo">Declaração de Acusação</h3>
+    <p class="popup-subtitulo">Com base no seu caderno de anotações:</p>
+    <div id="popup-itens-confirmados"></div>
+    <p class="popup-pergunta">Deseja declarar esta acusação?</p>
+    <div class="popup-acoes">
+      <button class="btn-secundario" id="btn-popup-cancelar">Cancelar</button>
+      <button class="btn-primario" id="btn-popup-declarar">Declarar Acusação</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Formulário de acusação -->
+<div class="modal oculto" id="modal-acusacao">
+  <div class="modal-conteudo">
+    <h2>Mandado de Prisão</h2>
+
+    <div class="modal-campo">
+      <label for="sel-suspeito">O assassino é</label>
+      <select id="sel-suspeito"></select>
+    </div>
+
+    <div class="modal-campo">
+      <label for="sel-arma">A arma utilizada foi</label>
+      <select id="sel-arma"></select>
+    </div>
+
+    <div class="modal-campo">
+      <label for="sel-local">O crime ocorreu no</label>
+      <select id="sel-local"></select>
+    </div>
+
+    <div class="modal-acoes">
+      <button class="btn-secundario" id="btn-cancelar">Cancelar</button>
+      <button class="btn-primario" id="btn-confirmar">Declarar Acusação</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Resultado da acusação -->
+<div class="modal oculto" id="modal-resultado">
+  <div class="modal-conteudo">
+    <div class="resultado-icone" id="resultado-icone"></div>
+    <h2 id="resultado-titulo"></h2>
+    <p class="resultado-texto" id="resultado-texto"></p>
+    <div class="modal-acoes">
+      <button class="btn-secundario" id="btn-voltar-inicio">Voltar ao Início</button>
+      <button class="btn-primario oculto" id="btn-proximo">Próximo Caso →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tooltip do caderno -->
+<div id="caderno-tooltip" class="caderno-tooltip oculto"></div>
+
+<!-- Preview flutuante de imagem -->
+<div id="img-preview" class="img-preview oculto">
+  <img id="img-preview-foto" src="" alt="" />
+</div>
+
+<script src="casos/registro.js"></script>
+<script src="casos/20260001.js"></script>
+<script src="casos/20260002.js"></script>
+<script src="progresso.js"></script>
+<script src="motor.js"></script>
+<script src="caderno.js"></script>
+<script src="tema.js"></script>
+<script>Tema.carregar();</script>
+
+<script>
+  // ── Lê parâmetros da URL ──
+  const params = new URLSearchParams(window.location.search);
+  const casoId = params.get("caso");
+  const modo   = params.get("modo") || "livre";
+
+  // ── Redireciona para o início se faltar informação ──
+  const jogador = Progresso.carregarJogador();
+  if (!jogador || !casoId) {
+    window.location.href = "index.html";
+  }
+
+  // ── Busca o objeto do caso pelo ID ──
+  const casoAtual = window["caso" + casoId];
+  if (!casoAtual) {
+    alert("Caso não encontrado.");
+    window.location.href = "index.html";
+  }
+
+  // ── Preenche cabeçalho ──
+  document.getElementById("caso-numero").textContent = "#" + casoAtual.id;
+  document.getElementById("caso-titulo").textContent = casoAtual.titulo;
+  document.title = "#" + casoAtual.id + " — " + casoAtual.titulo;
+
+  // ── Botão voltar ──
+  document.getElementById("btn-voltar-header").addEventListener("click", function() {
+    window.location.href = "index.html";
+  });
+
+  // ── Inicia o motor e o caderno ──
+  Motor.iniciar(casoAtual, jogador);
+  Caderno.iniciar(casoAtual);
+
+  // ── Modal de acusação: popula os selects ──
+  function popularSelects() {
+    const selSuspeito = document.getElementById("sel-suspeito");
+    const selArma     = document.getElementById("sel-arma");
+    const selLocal    = document.getElementById("sel-local");
+
+    selSuspeito.innerHTML = "";
+    selArma.innerHTML = "";
+    selLocal.innerHTML = "";
+
+    casoAtual.suspeitos.forEach(function(s) {
+      selSuspeito.innerHTML += "<option value='" + s.id + "'>" + s.nome + "</option>";
+    });
+    casoAtual.armas.forEach(function(a) {
+      selArma.innerHTML += "<option value='" + a.id + "'>" + a.nome + "</option>";
+    });
+    casoAtual.locais.forEach(function(l) {
+      selLocal.innerHTML += "<option value='" + l.id + "'>" + l.nome + "</option>";
+    });
+  }
+
+  // ── Abrir / fechar caderno ──
+  document.getElementById("btn-caderno").addEventListener("click", function() {
+    Caderno.abrir();
+  });
+
+  document.getElementById("btn-fechar-caderno").addEventListener("click", function() {
+    Caderno.fechar();
+  });
+
+  document.getElementById("btn-limpar-tudo").addEventListener("click", function() {
+    Caderno.limparTudo();
+  });
+
+  document.getElementById("btn-acusar-caderno").addEventListener("click", function() {
+    Caderno.acusarPeloCaderno();
+  });
+
+  document.getElementById("btn-popup-cancelar").addEventListener("click", function() {
+    document.getElementById("popup-acusacao-caderno").classList.add("oculto");
+  });
+
+  document.getElementById("btn-popup-declarar").addEventListener("click", function() {
+    const ids = Caderno.lerConfirmados();
+    document.getElementById("popup-acusacao-caderno").classList.add("oculto");
+    Caderno.fechar();
+    const acertou = Motor.acusar(ids.suspeito, ids.arma, ids.local);
+    mostrarResultado(acertou, ids.suspeito, ids.arma, ids.local);
+  });
+
+  document.getElementById("modal-caderno").addEventListener("click", function(e) {
+    if (e.target === this) Caderno.fechar();
+  });
+
+  // ── Abrir modal de acusação ──
+  document.getElementById("btn-acusar").addEventListener("click", function() {
+    popularSelects();
+    document.getElementById("modal-acusacao").classList.remove("oculto");
+  });
+
+  document.getElementById("btn-cancelar").addEventListener("click", function() {
+    document.getElementById("modal-acusacao").classList.add("oculto");
+  });
+
+  // ── Confirmar acusação ──
+  document.getElementById("btn-confirmar").addEventListener("click", function() {
+    const suspeitoId = document.getElementById("sel-suspeito").value;
+    const armaId     = document.getElementById("sel-arma").value;
+    const localId    = document.getElementById("sel-local").value;
+
+    const acertou = Motor.acusar(suspeitoId, armaId, localId);
+
+    document.getElementById("modal-acusacao").classList.add("oculto");
+    mostrarResultado(acertou, suspeitoId, armaId, localId);
+  });
+
+  // ── Exibir resultado ──
+  function mostrarResultado(acertou, suspeitoId, armaId, localId) {
+    const modal   = document.getElementById("modal-resultado");
+    const icone   = document.getElementById("resultado-icone");
+    const titulo  = document.getElementById("resultado-titulo");
+    const texto   = document.getElementById("resultado-texto");
+    const btnProx = document.getElementById("btn-proximo");
+
+    const suspeito = casoAtual.suspeitos.find(function(s) { return s.id === suspeitoId; });
+    const arma     = casoAtual.armas.find(function(a) { return a.id === armaId; });
+    const local    = casoAtual.locais.find(function(l) { return l.id === localId; });
+
+    if (acertou) {
+      icone.textContent  = "🔍";
+      titulo.textContent = "Caso Encerrado!";
+      texto.innerHTML    =
+        "Sua dedução estava correta, Detetive " + jogador.nome + ".<br><br>" +
+        "<strong>" + suspeito.nome + "</strong> cometeu o crime com <strong>" +
+        arma.nome + "</strong> no <strong>" + local.nome + "</strong>.";
+
+      // Mostra botão de próximo caso se existir
+      const indexAtual = registroCasos.indexOf(casoId);
+      if (indexAtual < registroCasos.length - 1) {
+        btnProx.classList.remove("oculto");
+        btnProx.addEventListener("click", function() {
+          const proximo = registroCasos[indexAtual + 1];
+          window.location.href = "jogo.html?caso=" + proximo + "&modo=" + modo;
+        });
+      }
+    } else {
+      icone.textContent  = "✗";
+      titulo.textContent = "Acusação Incorreta";
+      texto.innerHTML    =
+        "Sua teoria não se sustenta, Detetive " + jogador.nome + ".<br><br>" +
+        "Revise as pistas com mais atenção antes de fazer uma nova acusação.";
+      btnProx.classList.add("oculto");
+    }
+
+    modal.classList.remove("oculto");
+  }
+
+  // ── Voltar ao início ──
+  document.getElementById("btn-voltar-inicio").addEventListener("click", function() {
+    window.location.href = "index.html";
+  });
+</script>
+
+</body>
+</html>

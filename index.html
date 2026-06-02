@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Linhas do Crime</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<button class="btn-tema btn-tema-flutuante" onclick="Tema.alternar()">🪶 Academia</button>
+
+<div class="tela-inicio">
+  <h1 class="logo-titulo">Linhas do Crime</h1>
+  <p class="logo-subtitulo">Investigações &amp; Deduções</p>
+  <div class="separador"></div>
+
+  <!-- TELA 1: Nome e gênero -->
+  <div class="painel" id="tela-cadastro">
+    <h2>Identifique-se, Detetive</h2>
+
+    <div class="campo">
+      <label for="input-nome">Seu nome</label>
+      <input type="text" id="input-nome" placeholder="Digite seu nome..." maxlength="30" />
+    </div>
+
+    <div class="campo">
+      <label>Gênero</label>
+      <div class="opcoes-genero">
+        <label class="opcao-genero" id="label-masc">
+          <input type="radio" name="genero" value="M" /> Masculino
+        </label>
+        <label class="opcao-genero" id="label-fem">
+          <input type="radio" name="genero" value="F" /> Feminino
+        </label>
+      </div>
+    </div>
+
+    <button class="btn-primario" id="btn-continuar" disabled>Continuar</button>
+    <button class="btn-como-jogar" id="btn-como-jogar">📋 Como Jogar</button>
+  </div>
+
+  <!-- TELA 3: Manual de Investigação -->
+  <div class="painel painel-manual oculto" id="tela-como-jogar">
+
+    <div class="manual-header">
+      <span class="manual-icone">📋</span>
+      <h2 class="manual-titulo">Manual de Investigação</h2>
+    </div>
+
+    <div class="manual-topicos">
+
+      <div class="manual-topico">
+        <span class="manual-topico-icone">🔍</span>
+        <div>
+          <h3>Analise as Pistas</h3>
+          <p>Leia as evidências na barra lateral para cruzar as informações do crime.</p>
+        </div>
+      </div>
+
+      <div class="manual-topico">
+        <span class="manual-topico-icone">📝</span>
+        <div>
+          <h3>Caderno de Notas</h3>
+          <p>Clique nas células para alternar:
+            <span class="manual-estado-vazio">[ ]</span> Vazio
+            <span class="manual-seta">→</span>
+            <span class="manual-estado-x">✕</span> Descarte
+            <span class="manual-seta">→</span>
+            <span class="manual-estado-v">✓</span> Confirmado
+          </p>
+        </div>
+      </div>
+
+      <div class="manual-topico">
+        <span class="manual-topico-icone">⚖️</span>
+        <div>
+          <h3>Formule a Acusação</h3>
+          <p>Marque os <span class="manual-estado-v">✓</span> corretos e clique em <strong>"Formular Acusação"</strong> para o veredito.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="manual-rodape-dica">💡 Cada suspeito possui apenas uma arma e esteve em um único local.</p>
+
+    <button class="btn-primario" id="btn-voltar-manual">← Voltar para o Início</button>
+  </div>
+
+  <!-- TELA 2: Modo de jogo -->
+  <div class="painel oculto" id="tela-modo">
+    <h2>Como deseja jogar?</h2>
+
+    <div class="opcoes-modo">
+      <div class="opcao-modo" id="opcao-historia" data-modo="historia">
+        <h3>Modo História</h3>
+        <p>Os casos são revelados em ordem. Resolva um para desbloquear o próximo.</p>
+      </div>
+      <div class="opcao-modo" id="opcao-livre" data-modo="livre">
+        <h3>Modo Livre</h3>
+        <p>Escolha qualquer caso disponível e jogue na ordem que quiser.</p>
+      </div>
+    </div>
+
+    <!-- Lista de casos (aparece apenas no modo livre) -->
+    <div id="lista-casos-container" class="oculto">
+      <p class="secao-titulo" style="margin-bottom:0.8rem;">Selecione o caso</p>
+      <div class="lista-casos" id="lista-casos"></div>
+    </div>
+
+    <button class="btn-primario" id="btn-jogar" disabled>Iniciar Investigação</button>
+  </div>
+</div>
+
+<script src="casos/registro.js"></script>
+<script src="progresso.js"></script>
+<script src="tema.js"></script>
+<script>Tema.carregar();</script>
+<script>
+  // Dados do formulário
+  let nomeEscolhido = "";
+  let generoEscolhido = "";
+  let modoEscolhido = "";
+  let casoEscolhido = "";
+
+  // ── Tela 1: validação do formulário ──
+
+  const inputNome = document.getElementById("input-nome");
+  const btnContinuar = document.getElementById("btn-continuar");
+  const radios = document.querySelectorAll("input[name='genero']");
+
+  function validarCadastro() {
+    const nomeOk = inputNome.value.trim().length >= 2;
+    const generoOk = generoEscolhido !== "";
+    btnContinuar.disabled = !(nomeOk && generoOk);
+  }
+
+  inputNome.addEventListener("input", validarCadastro);
+
+  radios.forEach(function(radio) {
+    radio.addEventListener("change", function() {
+      generoEscolhido = this.value;
+      document.getElementById("label-masc").classList.toggle("selecionado", generoEscolhido === "M");
+      document.getElementById("label-fem").classList.toggle("selecionado", generoEscolhido === "F");
+      validarCadastro();
+    });
+  });
+
+  document.getElementById("btn-como-jogar").addEventListener("click", function() {
+    document.getElementById("tela-cadastro").classList.add("oculto");
+    document.getElementById("tela-como-jogar").classList.remove("oculto");
+  });
+
+  document.getElementById("btn-voltar-manual").addEventListener("click", function() {
+    document.getElementById("tela-como-jogar").classList.add("oculto");
+    document.getElementById("tela-cadastro").classList.remove("oculto");
+  });
+
+  btnContinuar.addEventListener("click", function() {
+    nomeEscolhido = inputNome.value.trim();
+    Progresso.salvarJogador(nomeEscolhido, generoEscolhido);
+    document.getElementById("tela-cadastro").classList.add("oculto");
+    document.getElementById("tela-modo").classList.remove("oculto");
+  });
+
+  // ── Tela 2: seleção de modo ──
+
+  const btnJogar = document.getElementById("btn-jogar");
+
+  document.querySelectorAll(".opcao-modo").forEach(function(el) {
+    el.addEventListener("click", function() {
+      document.querySelectorAll(".opcao-modo").forEach(function(o) { o.classList.remove("selecionado"); });
+      el.classList.add("selecionado");
+      modoEscolhido = el.dataset.modo;
+
+      if (modoEscolhido === "historia") {
+        document.getElementById("lista-casos-container").classList.add("oculto");
+        // No modo história, seleciona automaticamente o próximo caso desbloqueado
+        casoEscolhido = proximoCasoDesbloqueado();
+        btnJogar.disabled = !casoEscolhido;
+      } else {
+        document.getElementById("lista-casos-container").classList.remove("oculto");
+        renderizarListaCasos();
+        btnJogar.disabled = true;
+      }
+    });
+  });
+
+  function proximoCasoDesbloqueado() {
+    for (let i = 0; i < registroCasos.length; i++) {
+      if (Progresso.estaDesbloqueado(registroCasos[i], registroCasos)) {
+        if (!Progresso.casosConcluidos().includes(registroCasos[i])) {
+          return registroCasos[i];
+        }
+      }
+    }
+    // Todos concluídos: volta ao primeiro
+    return registroCasos[0];
+  }
+
+  function renderizarListaCasos() {
+    const container = document.getElementById("lista-casos");
+    container.innerHTML = "";
+    const concluidos = Progresso.casosConcluidos();
+
+    registroCasos.forEach(function(id) {
+      const desbloqueado = Progresso.estaDesbloqueado(id, registroCasos);
+      const concluido = concluidos.includes(id);
+
+      const item = document.createElement("div");
+      item.className = "item-caso" + (desbloqueado ? "" : " bloqueado");
+
+      item.innerHTML =
+        "<div>" +
+          "<div class='item-caso-numero'>#" + id + "</div>" +
+          "<div class='item-caso-titulo'>Carregando...</div>" +
+        "</div>" +
+        "<div class='item-caso-status" + (concluido ? " concluido" : "") + "'>" +
+          (concluido ? "Concluído ✓" : desbloqueado ? "Disponível" : "Bloqueado 🔒") +
+        "</div>";
+
+      if (desbloqueado) {
+        item.addEventListener("click", function() {
+          document.querySelectorAll(".item-caso").forEach(function(i) { i.style.borderColor = ""; });
+          item.style.borderColor = "var(--dourado)";
+          casoEscolhido = id;
+          btnJogar.disabled = false;
+        });
+      }
+
+      container.appendChild(item);
+    });
+
+    // Carrega os títulos dos casos dinamicamente
+    carregarTitulosCasos();
+  }
+
+  function carregarTitulosCasos() {
+    // Os títulos são lidos dos objetos de caso que já estão carregados
+    const itens = document.querySelectorAll(".item-caso");
+    itens.forEach(function(item, i) {
+      const id = registroCasos[i];
+      const casoObj = window["caso" + id];
+      if (casoObj) {
+        item.querySelector(".item-caso-titulo").textContent = casoObj.titulo;
+      }
+    });
+  }
+
+  btnJogar.addEventListener("click", function() {
+    if (!casoEscolhido) return;
+    window.location.href = "jogo.html?caso=" + casoEscolhido + "&modo=" + modoEscolhido;
+  });
+
+  // ── Verifica se jogador já tem cadastro salvo ──
+  const jogadorSalvo = Progresso.carregarJogador();
+  if (jogadorSalvo) {
+    inputNome.value = jogadorSalvo.nome;
+    generoEscolhido = jogadorSalvo.genero;
+    const radioSalvo = document.querySelector("input[value='" + jogadorSalvo.genero + "']");
+    if (radioSalvo) radioSalvo.checked = true;
+    document.getElementById("label-masc").classList.toggle("selecionado", jogadorSalvo.genero === "M");
+    document.getElementById("label-fem").classList.toggle("selecionado", jogadorSalvo.genero === "F");
+    validarCadastro();
+  }
+</script>
+
+<!-- Carrega todos os casos para que os títulos fiquem disponíveis na lista -->
+<script src="casos/20260001.js"></script>
+<script src="casos/20260002.js"></script>
+
+</body>
+</html>
