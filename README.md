@@ -1,7 +1,7 @@
 # 🔍 Linhas do Crime
 
 <p align="center">
-  <img src="https://img.shields.io/badge/versão-1.3.0-brightgreen?style=flat" />
+  <img src="https://img.shields.io/badge/versão-1.4.0-brightgreen?style=flat" />
   <img src="https://img.shields.io/badge/status-ativo-brightgreen?style=flat" />
   <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white" />
   <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white" />
@@ -67,10 +67,11 @@ Jogo de dedução lógica baseado no livro **Murdle**, onde o(a) jogador(a) assu
 
 ```
 Linhas-do-Crime/
-├── index.html              # Tela inicial com galeria animada
+├── index.html              # Tela inicial com galeria animada e versão dinâmica
 ├── intro.html              # Introdução cinematográfica com narração
 ├── jogo.html               # Tela principal do jogo
 ├── marcador.html           # Ferramenta auxiliar para gerar timestamps
+├── versao.js               # Versão atual do jogo (fonte única)
 ├── style.css               # Estilos — tema Matrix e tema Academia
 ├── motor.js                # Motor do jogo (renderização, pistas, acusação)
 ├── caderno.js              # Caderno de Anotações (grid lógico)
@@ -97,6 +98,10 @@ Linhas-do-Crime/
 ---
 
 ## Changelog
+
+### v1.4.0 — 2026-06-02
+- Versão dinâmica na tela inicial lida de `versao.js` (fonte única, sempre sincronizada com o README)
+- Versão exibida abaixo do painel em fonte preta, fora da caixa para não interferir no layout
 
 ### v1.3.0 — 2026-06-02
 - Introdução cinematográfica com narração sincronizada, música ambiente e efeito de digitação

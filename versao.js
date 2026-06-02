@@ -1,1 +1,1 @@
-var VERSAO = "1.3.0";
+var VERSAO = "1.4.0";
