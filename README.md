@@ -60,7 +60,7 @@ Jogo de dedução lógica baseado no livro **Murdle**, onde o(a) jogador(a) assu
 |---|---|---|
 | #20260001 | Morte na Inauguração | ✅ Disponível |
 | #20260002 | A Premiação Mortal | ✅ Disponível |
-| #20260003 | A Última Final | ✅ Disponível |
+| #20260003 | O Apito Fora do Tempo | ✅ Disponível |
 
 ---
 
@@ -101,7 +101,7 @@ Linhas-do-Crime/
 ## Changelog
 
 ### v1.5.0 — 2026-06-04
-- Caso #20260003 "A Última Final" — assassinato no Maracanã com 3 suspeitos, 4 pistas e 9 novas imagens
+- Caso #20260003 "O Apito Fora do Tempo" — assassinato no Maracanã com 3 suspeitos, 4 pistas e 9 novas imagens
 
 ### v1.4.0 — 2026-06-02
 - Versão dinâmica na tela inicial lida de `versao.js` (fonte única, sempre sincronizada com o README)
