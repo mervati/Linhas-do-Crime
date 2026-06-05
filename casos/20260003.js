@@ -1,7 +1,7 @@
 var caso20260003 = {
 
   id: "20260003",
-  titulo: "A Última Final",
+  titulo: "O Apito Fora do Tempo",
 
   historia: "O(a) [Detetive] foi convocado(a) para o Estádio do Maracanã na noite de uma grande final. Com os portões já fechados e o público dispersado após uma vitória histórica, o craque Denílson Lima — prestes a ser vendido para a Europa — permaneceu no complexo para tratar de questões contratuais de última hora. Às 23h30, os refletores do campo piscaram por uma oscilação elétrica. Minutos depois, durante a ronda de fechamento, o corpo do atleta foi encontrado sem vida. Com acesso restrito por credenciais eletrônicas, apenas três pessoas estavam nos setores internos naquele momento. [nome] isolou a área e sabe que o culpado está entre eles.",
 
