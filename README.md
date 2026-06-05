@@ -1,7 +1,7 @@
 # 🔍 Linhas do Crime
 
 <p align="center">
-  <img src="https://img.shields.io/badge/versão-1.4.0-brightgreen?style=flat" />
+  <img src="https://img.shields.io/badge/versão-1.5.0-brightgreen?style=flat" />
   <img src="https://img.shields.io/badge/status-ativo-brightgreen?style=flat" />
   <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white" />
   <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white" />
@@ -60,6 +60,7 @@ Jogo de dedução lógica baseado no livro **Murdle**, onde o(a) jogador(a) assu
 |---|---|---|
 | #20260001 | Morte na Inauguração | ✅ Disponível |
 | #20260002 | A Premiação Mortal | ✅ Disponível |
+| #20260003 | A Última Final | ✅ Disponível |
 
 ---
 
@@ -98,6 +99,9 @@ Linhas-do-Crime/
 ---
 
 ## Changelog
+
+### v1.5.0 — 2026-06-04
+- Caso #20260003 "A Última Final" — assassinato no Maracanã com 3 suspeitos, 4 pistas e 9 novas imagens
 
 ### v1.4.0 — 2026-06-02
 - Versão dinâmica na tela inicial lida de `versao.js` (fonte única, sempre sincronizada com o README)
