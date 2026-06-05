@@ -1,7 +1,7 @@
 # 🔍 Linhas do Crime
 
 <p align="center">
-  <img src="https://img.shields.io/badge/versão-1.5.0-brightgreen?style=flat" />
+  <img src="https://img.shields.io/badge/versão-1.5.1-brightgreen?style=flat" />
   <img src="https://img.shields.io/badge/status-ativo-brightgreen?style=flat" />
   <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white" />
   <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white" />
@@ -99,6 +99,9 @@ Linhas-do-Crime/
 ---
 
 ## Changelog
+
+### v1.5.1 — 2026-06-04
+- Narração em áudio do caso #20260003 "O Apito Fora do Tempo" adicionada
 
 ### v1.5.0 — 2026-06-04
 - Caso #20260003 "O Apito Fora do Tempo" — assassinato no Maracanã com 3 suspeitos, 4 pistas e 9 novas imagens
